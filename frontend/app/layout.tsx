@@ -4,6 +4,8 @@ import "./globals.css";
 import { UserProvider } from "@/lib/user-context";
 import { ApiBootstrap } from "@/lib/api-bootstrap";
 
+export const dynamic = "force-dynamic";
+
 const nunito = Nunito({
   subsets: ["latin"],
   weight: ["600", "700", "800", "900"],
@@ -33,6 +35,10 @@ function readApiUrl() {
   return process.env.API_PUBLIC_URL || "";
 }
 
+function apiUrlScript(apiUrl: string) {
+  return "window.__FLUENT_API_URL__=" + JSON.stringify(apiUrl) + ";";
+}
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const apiUrl = readApiUrl();
 
@@ -40,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: apiUrlScript(apiUrl) }} />
       </head>
       <body className={nunito.className}>
         <ApiBootstrap apiUrl={apiUrl}>

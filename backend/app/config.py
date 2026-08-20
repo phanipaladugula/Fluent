@@ -67,7 +67,7 @@ class AppConfig:
 
         cors_raw = os.environ.get(
             "CORS_ORIGINS",
-            "http://localhost:3000,http://127.0.0.1:3000",
+            "http://localhost:3000,http://127.0.0.1:3000,https://fluent.rdrt.dev,https://lingo.rdrt.dev",
         )
         self.CORS_ORIGINS = split_csv(cors_raw)
 

@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
       return [];
     }
     const backend = process.env.API_PROXY_TARGET || "http://127.0.0.1:8000";
+    const isLoopback =
+      backend.indexOf("127.0.0.1") !== -1 || backend.indexOf("localhost") !== -1;
+    if (process.env.NODE_ENV === "production" && isLoopback) {
+      return [];
+    }
     return [
       {
         source: "/api/:path*",

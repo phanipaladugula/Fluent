@@ -7,11 +7,32 @@ function trimSlash(value: string) {
 
 let apiBase = trimSlash(process.env.NEXT_PUBLIC_API_URL || "");
 
+type FluentWindow = Window & { __FLUENT_API_URL__?: string };
+
+function readWindowApiUrl() {
+  if (typeof window === "undefined") {
+    return "";
+  }
+  const fluentWindow = window as FluentWindow;
+  if (typeof fluentWindow.__FLUENT_API_URL__ === "string") {
+    return trimSlash(fluentWindow.__FLUENT_API_URL__);
+  }
+  return "";
+}
+
 export function setApiBase(url: string) {
   apiBase = trimSlash(url);
+  if (typeof window !== "undefined") {
+    const fluentWindow = window as FluentWindow;
+    fluentWindow.__FLUENT_API_URL__ = apiBase;
+  }
 }
 
 export function getApiBase() {
+  const fromWindow = readWindowApiUrl();
+  if (fromWindow !== "") {
+    return fromWindow;
+  }
   return apiBase;
 }
 
